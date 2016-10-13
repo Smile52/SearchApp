@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              android:orientation="horizontal"
+              android:layout_width="match_parent"
+              android:layout_height="48dp"
+              android:background="@color/search_bg_tinge_color"
+            >
+    <TextView
+        android:id="@+id/result_item_name"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:textColor="@color/white"
+        android:textSize="15sp"
+        android:layout_marginLeft="19dp"
+        android:text="@string/result_app"/>
+    <TextView
+        android:layout_width="0dp"
+        android:layout_height="match_parent"
+        android:layout_weight="1"/>
+    <CheckBox
+        android:id="@+id/result_item_status"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+
+        android:button="@drawable/result_box_bg"
+
+        android:layout_marginRight="19dp"/>
+</LinearLayout>

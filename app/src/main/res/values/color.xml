@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="search_bg_color">#0e6b73</color>
+    <color name="input_bg_color">#21ffffff</color>
+    <color name="white">#ffffff</color>
+    <color name="search_hint_color">#62ffffff</color>
+    <color name="hint_text_color">#6effffff</color>
+    <color name="search_line">#22ffffff</color>
+    <color name="search_bg_tinge_color">#26ffffff</color>
+    <color name="divide_line_color">#b1ffffff</color>
+    
+    <color name="forty_percent_white">#84ffffff</color>
+
+</resources>

@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              android:orientation="horizontal"
+              android:layout_width="match_parent"
+              android:layout_height="40dp"
+
+
+        >
+
+    <ImageView
+        android:id="@+id/item_seeting_icon"
+        android:layout_width="30dp"
+        android:layout_height="30dp"
+        android:layout_marginLeft="20dp"
+
+        android:layout_centerVertical="true"
+        android:layout_marginStart="19dp"/>
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Google"
+        android:layout_centerVertical="true"
+        android:layout_marginLeft="10dp"
+        android:layout_toRightOf="@id/item_seeting_icon"
+        android:id="@+id/item_seeting_name"/>
+
+    <RadioButton
+        android:id="@+id/item_seeting_check"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="right"
+        android:layout_marginEnd="12dp"
+        android:layout_alignTop="@+id/item_seeting_icon"
+        android:layout_alignParentEnd="true"/>
+</RelativeLayout>

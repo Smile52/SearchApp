@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<appwidget-provider
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:initialLayout="@layout/search_wiget"
+    android:minHeight="40dp"
+    android:minResizeHeight="38dp"
+    android:minResizeWidth="294dp"
+    android:minWidth="294dp"
+    android:resizeMode="horizontal|vertical"
+    android:updatePeriodMillis="0"
+    android:widgetCategory="keyguard|home_screen">
+</appwidget-provider>

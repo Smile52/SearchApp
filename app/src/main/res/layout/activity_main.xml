@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/activity_main"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:background="@color/search_bg_color"
+    >
+
+    <RelativeLayout
+        android:id="@+id/search_input_layout"
+        android:layout_marginLeft="16dp"
+        android:layout_marginRight="16dp"
+        android:layout_marginTop="30dp"
+        android:layout_width="wrap_content"
+        android:layout_height="40dp"
+
+        android:background="@drawable/input_bg">
+        <ImageView
+            android:id="@+id/search_seeting_icon_img"
+            android:layout_width="25dp"
+            android:layout_height="25dp"
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="8dp"
+            android:src="@drawable/search_icon_google"/>
+        <ImageView
+
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:layout_centerVertical="true"
+            android:background="@drawable/search_icon_bg"
+            />
+        <EditText
+            android:id="@+id/input_search_et"
+            android:layout_width="match_parent"
+            android:layout_height="40dp"
+            android:layout_marginLeft="15dp"
+            android:hint="Search"
+            android:background="@null"
+            android:textColorHint="@color/search_hint_color"
+            android:layout_centerVertical="true"
+            android:layout_toRightOf="@id/search_seeting_icon_img"/>
+
+        <ImageView
+            android:id="@+id/search_icon_img"
+            android:layout_width="25dp"
+            android:layout_height="25dp"
+            android:layout_centerVertical="true"
+
+            android:layout_marginRight="10dp"
+            android:src="@drawable/search_icon_img_bg"
+            android:layout_alignParentRight="true" />
+        <ImageView
+            android:id="@+id/delete_icon_img"
+            android:layout_width="25dp"
+            android:layout_height="25dp"
+            android:layout_centerVertical="true"
+            android:src="@drawable/delete_icon"
+            android:visibility="gone"
+            android:layout_toLeftOf="@id/search_icon_img"/>
+
+    </RelativeLayout>
+
+
+    <include layout="@layout/hint_layout"
+
+        >
+
+    </include>
+
+    <ExpandableListView
+        android:id="@+id/searcg_result_liv"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:visibility="gone"
+        >
+
+    </ExpandableListView>
+</LinearLayout>
