@@ -201,18 +201,18 @@ public class SearchResultAdapter extends BaseExpandableListAdapter {
                     break;
                     //短信
                 }else if (mGroup.get(i).equals(mContext.getResources().getString(R.string.result_msn))){
-                    String titleName=mResultMap.get(i).get(i1).getDetail();
+                    String titleName=mResultMap.get(i).get(i1).getName();
                     if (titleName ==null||titleName.isEmpty()){
                         holder.mTitleName.setText(mResultMap.get(i).get(i1).getEvent());
                     }else {
                         holder.mTitleName.setText(titleName);
                     }
-                    Log.e("smile","短信内容"+mResultMap.get(i).get(i1).getName());
+                    //   XLog.e("smile","短信内容"+mResultMap.get(i).get(i1).getDetail());
 
-                    Log.e("smile","短信联系人名字 "+mResultMap.get(i).get(i1).getDetail()+"  号码"+mResultMap.get(i).get(i1).getEvent());
-                    holder.mDetail.setText(mResultMap.get(i).get(i1).getName());
+                    //   XLog.e("smile","短信联系人名字 "+mResultMap.get(i).get(i1).getDetail()+"  号码"+mResultMap.get(i).get(i1).getEvent());
+                    holder.mDetail.setText(mResultMap.get(i).get(i1).getDetail());
                     holder.mIcon.setImageResource(R.drawable.list_icon_message);
-                    Log.e("smile","短信");
+                    //  XLog.e("smile","短信");
                     break;
 
                 }else if (mGroup.get(i).equals(mContext.getResources().getString(R.string.result_calendar))){
@@ -245,6 +245,11 @@ public class SearchResultAdapter extends BaseExpandableListAdapter {
         return TYPE_NORMAL;
 
 
+    }
+
+    public void clearData(){
+        mResultMap.clear();
+        mGroup.clear();
     }
 
     /**

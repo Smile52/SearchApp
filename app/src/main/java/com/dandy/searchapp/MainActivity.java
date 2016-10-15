@@ -57,6 +57,7 @@ public class MainActivity extends AppCompatActivity implements SearchResultImp,V
     private SearchResultAdapter mResultAdapter;
     private SeetingPresenter mPresenter;
     private int mKey=0;
+    private List<Integer> mKeys=new ArrayList<>();
     @RequiresApi(api = Build.VERSION_CODES.JELLY_BEAN)
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -207,6 +208,7 @@ public class MainActivity extends AppCompatActivity implements SearchResultImp,V
                 searchOtherTask(mContent);
                 break;
             }
+
             setResultData(key,resultList);
         }
 
@@ -219,7 +221,14 @@ public class MainActivity extends AppCompatActivity implements SearchResultImp,V
      */
     private synchronized   void setResultData(int key, final List<Result>resultList){
         String title = "";//标题
-
+        Log.e("smile","返回结果 "+resultList.toString());
+        for (int i=0;i<mKeys.size();i++){
+            if (key==mKeys.get(i)){
+                Log.e("smile","有相同的数据了");
+                return;
+            }
+        }
+        mKeys.add(key);
 
         switch (key){
             case Config.TYPE_CONTACT:
@@ -272,7 +281,11 @@ public class MainActivity extends AppCompatActivity implements SearchResultImp,V
      * 清除数据
      */
     private void cleanData(){
-        mResultAdapter= null;
+        if (mResultAdapter!=null){
+            mResultAdapter.clearData();
+            mResultAdapter= null;
+        }
+
         mKey=0;
     }
     @Override

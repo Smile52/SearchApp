@@ -89,7 +89,7 @@ public class SearchContactTask extends BaseAsyncTask {
      * @param list
      * @return
      */
-    private List<Result> removeDuplicate(List<Result> list){
+    public List<Result> removeDuplicate(List<Result> list){
         List<Result> resultList=new ArrayList<>();
         for (Object o:list){
             if (!resultList.contains(o)){

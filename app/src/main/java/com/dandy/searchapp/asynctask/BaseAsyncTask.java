@@ -7,6 +7,7 @@ import android.os.AsyncTask;
 import com.dandy.searchapp.MainActivity;
 import com.dandy.searchapp.entity.Result;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -31,5 +32,21 @@ public abstract class BaseAsyncTask extends AsyncTask<String,Void,Map<Integer,Li
 
     public int getInt(Cursor cursor, String key) {
         return cursor.getInt(cursor.getColumnIndex(key));
+    }
+
+    /**
+     * 去掉重复的数据
+     * @param list
+     * @return
+     */
+    public List<Result> removeDuplicate(List<Result> list){
+        List<Result> resultList=new ArrayList<>();
+        for (Object o:list){
+            if (!resultList.contains(o)){
+                resultList.add((Result) o);
+            }
+        }
+
+        return resultList;
     }
 }

@@ -35,38 +35,39 @@ public class SearchMsnTask extends BaseAsyncTask {
     protected Map<Integer,List<Result>> doInBackground(String... strings) {
         List<Result> results=new ArrayList<>();
         ContentResolver cr =mContext. getContentResolver();
-        String[] projection=new String[]{COLUMN_ADDRESS,COLUMN_BODY,COLUMN_NAME};
+        String [] projection=new String[]{COLUMN_ADDRESS,COLUMN_BODY,COLUMN_NAME};
         String selection=COLUMN_ADDRESS+" LIKE ? OR "+COLUMN_BODY+" LIKE ? OR "+COLUMN_NAME+" LIKE ? ";
-        String[]args=new String[]{"%"+ strings[0] +"%","%"+ strings[0] +"%","%"+ strings[0] +"%"};
+        String []args=new String[]{"%"+ strings[0] +"%","%"+ strings[0] +"%","%"+ strings[0] +"%"};
         Cursor cursor=cr.query(SMS_INBOX,projection,selection,args,null);
         while (cursor.moveToNext()){
             String number = cursor.getString(cursor.getColumnIndex(COLUMN_ADDRESS));//手机号
             String name = cursor.getString(cursor.getColumnIndex(COLUMN_NAME));//联系人姓名列表
             String body = cursor.getString(cursor.getColumnIndex(COLUMN_BODY));
-            Log.e("smile "," num "+number+" body "+body+" name"+name);
+            // XLog.e("smile "," num "+number+" body "+body+" name"+name);
 
-            if (name!=null){
+            if (number!=null){
                 Cursor cd=mContext.getContentResolver().query(
-                        ContactsContract.RawContacts.CONTENT_URI,new String[]{ContactsContract.RawContacts.DISPLAY_NAME_PRIMARY},
-                        ContactsContract.RawContacts._ID+ "=?",new String[]{name},null);
+                        ContactsContract.CommonDataKinds.Phone.CONTENT_URI,new String[]{ContactsContract.PhoneLookup.DISPLAY_NAME},
+                        ContactsContract.CommonDataKinds.Phone.NUMBER+ "=?",new String[]{number},null);
 
                 while (cd.moveToNext()){
-                    String displayName=cd.getString(cd.getColumnIndex(ContactsContract.RawContacts.DISPLAY_NAME_PRIMARY));
-                   //  Log.e("smile ","id  "+displayName);
+                    String  displayName=cd.getString(cd.getColumnIndex(ContactsContract.PhoneLookup.DISPLAY_NAME));
+                    //  Log.e("smile ","id  "+displayName);
                     name=displayName;
 
                 }
+                cd.close();
             }
 
             Result result=new Result();
-            result.setName(body);
+            result.setName(name);
             result.setEvent(number);
-            result.setDetail(name);
+            result.setDetail(body);
             results.add(result);
         }
         cursor.close();
         Map<Integer,List<Result>> listMap=new HashMap<>();
-        listMap.put(Config.TYPE_MSN,results);
+        listMap.put(Config.TYPE_MSN,removeDuplicate(results));
         return listMap;
     }
 }
