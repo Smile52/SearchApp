@@ -41,6 +41,7 @@ import java.util.List;
 import java.util.Map;
 
 import static android.view.View.GONE;
+import static android.view.View.INVISIBLE;
 import static android.view.View.VISIBLE;
 
 public class MainActivity extends AppCompatActivity implements SearchResultImp,View.OnClickListener{
@@ -109,20 +110,24 @@ public class MainActivity extends AppCompatActivity implements SearchResultImp,V
         @Override
         public void afterTextChanged(Editable editable) {
             // TODO Auto-generated method stub
-
-            //如果输入的长度大于等于1
             if (temp.length()>=1){
-                Log.e("dandy","输入的字符串"+temp);
+                mResultListView.setVisibility(VISIBLE);
+                cleanData();
+
+                // Log.e("dandy","输入的字符串"+temp);
                 getSearchConfig( temp.toString());
                 mDeleteImg.setVisibility(VISIBLE);
-                mHintLayout.setVisibility(GONE);
-                mResultListView.setVisibility(VISIBLE);
+                mHintLayout.setVisibility(INVISIBLE);
+
                 mContent=temp.toString();
-                cleanData();
+                mKeys.clear();
+
+
             }else {
-                mDeleteImg.setVisibility(GONE);
-                mResultListView.setVisibility(GONE);
+                //  XLog.e("smile","清除了数据");
+                cleanData();
                 mHintLayout.setVisibility(VISIBLE);
+                mResultListView.setVisibility(INVISIBLE);
             }
 
         }
@@ -144,33 +149,31 @@ public class MainActivity extends AppCompatActivity implements SearchResultImp,V
         isContacts=UtilSharedPreferences.getBooleanData(mContext,Config.KEY_ARRAY[1]);
         isMsn=UtilSharedPreferences.getBooleanData(mContext,Config.KEY_ARRAY[2]);
         isMusic=UtilSharedPreferences.getBooleanData(mContext,Config.KEY_ARRAY[3]);
-        isSchedule= UtilSharedPreferences.getBooleanData(mContext,Config.KEY_ARRAY[4]);
-        if (isAPP){
+        isSchedule=UtilSharedPreferences.getBooleanData(mContext,Config.KEY_ARRAY[4]);
+        if (true){
             SearchAppTask searchAppTask=new SearchAppTask(mContext);
             //searchAppTask.execute(content);
             searchAppTask.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR,content);
+        }else {
+            searchOtherTask(content);
         }
 
     }
 
     private void searchOtherTask(String content){
-
-        if (isAPP){
-
-        }
-        if (isContacts){
+        if (true){
             SearchContactTask searchContactTask=new SearchContactTask(mContext);
             searchContactTask.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR,content);
         }
-        if (isMsn){
+        if (true){
             SearchMsnTask searchMsnTask=new SearchMsnTask(mContext);
             searchMsnTask.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR,content);
         }
-        if (isMusic){
+        if (true){
             SearchMusicTask searchMusicTask=new SearchMusicTask(mContext);
             searchMusicTask.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR,content);
         }
-        if (isSchedule){
+        if (true){
             SearchScheduleTask searchScheduleTask=new SearchScheduleTask(mContext);
             searchScheduleTask.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR,content);
         }
@@ -179,14 +182,13 @@ public class MainActivity extends AppCompatActivity implements SearchResultImp,V
 
     @Override
     public void searchSuccess(Map<Integer, List<Result>> resultMap) {
-        Log.e("dandy","weee");
-        List<Result> resultList;
-        for (int key :resultMap.keySet()){
-            resultList=resultMap.get(key);
 
-            // XLog.e("smile","结果 "+key+" list"+resultList.toString());
+        List<Result> resultList;
+        for (int key : resultMap.keySet()){
+            resultList=resultMap.get(key);
+            Log.e("smile","结果 "+key+" list"+resultList.toString());
             if (key==0&&resultList.size()>0){
-                Log.e("dandy","长度"+resultList.size());
+                //XLog.e("dandy","长度"+resultList.size());
                 List<String> strings=new ArrayList<>();
                 strings.add(mContext.getResources().getString(R.string.result_app));
                 Map<Integer,List<Result>> map=new HashMap<>();
@@ -199,6 +201,7 @@ public class MainActivity extends AppCompatActivity implements SearchResultImp,V
                     mResultListView.expandGroup(i);
 
                 }
+                mResultListView.setDividerHeight(0);
                 mResultListView.setOnChildClickListener(mResultAdapter.getListener());
 
                 searchOtherTask(mContent);
@@ -211,7 +214,7 @@ public class MainActivity extends AppCompatActivity implements SearchResultImp,V
 
             setResultData(key,resultList);
         }
-
+        //mResultAdapter.getData();
     }
 
     /**
@@ -219,12 +222,13 @@ public class MainActivity extends AppCompatActivity implements SearchResultImp,V
      * @param key
      * @param resultList
      */
-    private synchronized   void setResultData(int key, final List<Result>resultList){
+    private synchronized   void setResultData(int key, final List<Result> resultList){
         String title = "";//标题
-        Log.e("smile","返回结果 "+resultList.toString());
+
+        //   XLog.e("smile","返回结果 "+resultList.toString());
         for (int i=0;i<mKeys.size();i++){
             if (key==mKeys.get(i)){
-                Log.e("smile","有相同的数据了");
+                //     XLog.e("smile","有相同的数据了");
                 return;
             }
         }
@@ -263,6 +267,7 @@ public class MainActivity extends AppCompatActivity implements SearchResultImp,V
                 mResultListView.expandGroup(i);
 
             }
+          //  XLog.e("smile","设置了新adapter");
         }else {
             Map<Integer, List<Result>> map=new HashMap<>();
             map.put(mKey,resultList);
@@ -272,8 +277,10 @@ public class MainActivity extends AppCompatActivity implements SearchResultImp,V
 
             }
             mKey++;
+          //  XLog.e("smile","设置了adapter");
         }
-
+        // invalidate();
+        mResultListView.setDividerHeight(0);
         mResultListView.setOnChildClickListener(mResultAdapter.getListener());
     }
 
@@ -283,6 +290,7 @@ public class MainActivity extends AppCompatActivity implements SearchResultImp,V
     private void cleanData(){
         if (mResultAdapter!=null){
             mResultAdapter.clearData();
+            mResultAdapter.notifyDataSetChanged();
             mResultAdapter= null;
         }
 

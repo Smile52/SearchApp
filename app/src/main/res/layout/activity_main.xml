@@ -63,18 +63,25 @@
     </RelativeLayout>
 
 
-    <include layout="@layout/hint_layout"
-
-        >
-
-    </include>
-
-    <ExpandableListView
-        android:id="@+id/searcg_result_liv"
+    <FrameLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:visibility="gone"
-        >
+        android:layout_height="match_parent">
+        <include layout="@layout/hint_layout"
 
-    </ExpandableListView>
+            >
+
+        </include>
+
+        <ExpandableListView
+            android:id="@+id/searcg_result_liv"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:visibility="gone"
+
+            android:divider="@null"
+            android:dividerHeight="0px"
+            >
+
+        </ExpandableListView>
+    </FrameLayout>
 </LinearLayout>

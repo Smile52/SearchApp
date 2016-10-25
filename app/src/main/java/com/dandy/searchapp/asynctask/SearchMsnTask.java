@@ -39,33 +39,36 @@ public class SearchMsnTask extends BaseAsyncTask {
         String selection=COLUMN_ADDRESS+" LIKE ? OR "+COLUMN_BODY+" LIKE ? OR "+COLUMN_NAME+" LIKE ? ";
         String []args=new String[]{"%"+ strings[0] +"%","%"+ strings[0] +"%","%"+ strings[0] +"%"};
         Cursor cursor=cr.query(SMS_INBOX,projection,selection,args,null);
-        while (cursor.moveToNext()){
-            String number = cursor.getString(cursor.getColumnIndex(COLUMN_ADDRESS));//手机号
-            String name = cursor.getString(cursor.getColumnIndex(COLUMN_NAME));//联系人姓名列表
-            String body = cursor.getString(cursor.getColumnIndex(COLUMN_BODY));
-            // XLog.e("smile "," num "+number+" body "+body+" name"+name);
+        if (cursor != null && cursor.moveToFirst()) {
+            do {
+                String number = cursor.getString(cursor.getColumnIndex(COLUMN_ADDRESS));//手机号
+                String name = cursor.getString(cursor.getColumnIndex(COLUMN_NAME));//联系人姓名列表
+                String body = cursor.getString(cursor.getColumnIndex(COLUMN_BODY));
+                // XLog.e("smile "," num "+number+" body "+body+" name"+name);
 
-            if (number!=null){
-                Cursor cd=mContext.getContentResolver().query(
-                        ContactsContract.CommonDataKinds.Phone.CONTENT_URI,new String[]{ContactsContract.PhoneLookup.DISPLAY_NAME},
-                        ContactsContract.CommonDataKinds.Phone.NUMBER+ "=?",new String[]{number},null);
+                if (number!=null){
+                    Cursor cd=mContext.getContentResolver().query(
+                            ContactsContract.CommonDataKinds.Phone.CONTENT_URI,new String[]{ContactsContract.PhoneLookup.DISPLAY_NAME},
+                            ContactsContract.CommonDataKinds.Phone.NUMBER+ "=?",new String[]{number},null);
 
-                while (cd.moveToNext()){
-                    String  displayName=cd.getString(cd.getColumnIndex(ContactsContract.PhoneLookup.DISPLAY_NAME));
-                    //  Log.e("smile ","id  "+displayName);
-                    name=displayName;
+                    while (cd.moveToNext()){
+                        String  displayName=cd.getString(cd.getColumnIndex(ContactsContract.PhoneLookup.DISPLAY_NAME));
+                        //  Log.e("smile ","id  "+displayName);
+                        name=displayName;
 
+                    }
+                    cd.close();
                 }
-                cd.close();
-            }
 
-            Result result=new Result();
-            result.setName(name);
-            result.setEvent(number);
-            result.setDetail(body);
-            results.add(result);
+                Result result=new Result();
+                result.setName(name);
+                result.setEvent(number);
+                result.setDetail(body);
+                results.add(result);
+            }while (cursor.moveToNext());
+            cursor.close();
         }
-        cursor.close();
+
         Map<Integer,List<Result>> listMap=new HashMap<>();
         listMap.put(Config.TYPE_MSN,removeDuplicate(results));
         return listMap;

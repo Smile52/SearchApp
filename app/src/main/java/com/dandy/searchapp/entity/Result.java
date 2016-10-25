@@ -65,17 +65,15 @@ public class Result {
 
     @Override
     public boolean equals(Object o) {
-        if (o==null){
+
+        if (!(o instanceof  Result)){
             return false;
         }
-        if (this==o){
-            return true;
-        }
         Result result= (Result) o;
-        if (this.getEvent().equals(result.getEvent())&&this.getName().equals(result.getName())){
-            return true;
+        if (this==null&&result==null){
+            return false;
         }
+        return  (this.getEvent().equals(result.getEvent())&&this.getName().equals(result.getName()));
 
-        return false;
     }
 }

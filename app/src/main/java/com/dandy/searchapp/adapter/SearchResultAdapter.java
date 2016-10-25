@@ -19,6 +19,7 @@ import android.widget.TextView;
 import com.dandy.searchapp.R;
 import com.dandy.searchapp.entity.Result;
 
+
 import java.util.List;
 import java.util.Map;
 
@@ -44,11 +45,13 @@ public class SearchResultAdapter extends BaseExpandableListAdapter {
 
     @Override
     public int getGroupCount() {
-
-        return mGroup.size();
+        if (mGroup==null||mResultMap==null){
+            return 0;
+        }else
+            return mGroup.size();
     }
 
-    public void addData(String title, int key, List<Result> results){
+    public void addData(String title,int key,List<Result> results){
         mGroup.add(title);
         mResultMap.put(key,results);
         notifyDataSetChanged();
@@ -59,11 +62,11 @@ public class SearchResultAdapter extends BaseExpandableListAdapter {
         if (mResultMap.get(i)==null||mResultMap.get(i).size()==0){
             return 0;
         }
-        Log.e("smile  ","getChildrenCount  i="+i);
+        // XLog.e("smile  ","getChildrenCount  i="+i);
         if (mResultMap.get(i).size()>DEFAULT_MAX_NUM){
             return mChildCounts[i];
         }else
-        return mResultMap.get(i).size() ;
+            return mResultMap.get(i).size() ;
     }
 
     @Override
@@ -99,8 +102,10 @@ public class SearchResultAdapter extends BaseExpandableListAdapter {
 
     @Override
     public synchronized View getGroupView(final int i, boolean b, View convertView, ViewGroup viewGroup) {
-       GroupHolder holder=null;
-
+        GroupHolder holder=null;
+        if (mGroup==null){
+            return null;
+        }
         if (convertView ==null){
             convertView= LayoutInflater.from(mContext).inflate(R.layout.item_group_result,viewGroup,false);
             holder=new GroupHolder();
@@ -115,9 +120,9 @@ public class SearchResultAdapter extends BaseExpandableListAdapter {
         if (mResultMap.get(i).size()<=DEFAULT_MAX_NUM){
             more.setVisibility(View.GONE);
         }
-        Log.e("smile","父标题 "+mGroup.get(i));
+       Log.e("smile","父标题 "+mGroup.get(i));
 
-            more.setOnClickListener(new View.OnClickListener() {
+        more.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 if (getChildrenCount(i)==DEFAULT_MAX_NUM){
@@ -132,7 +137,7 @@ public class SearchResultAdapter extends BaseExpandableListAdapter {
                 }
             }
         });
-
+       // XLog.e("smile","父view "+mGroup.get(i).toString());
         convertView.setClickable(true);
         return convertView;
     }
@@ -155,7 +160,7 @@ public class SearchResultAdapter extends BaseExpandableListAdapter {
             switch (type){
                 case TYPE_NORMAL:
                     holder=new ChildHolder();
-                    convertView= LayoutInflater.from(mContext).inflate(R.layout.item_child_result,viewGroup,false);
+                    convertView=LayoutInflater.from(mContext).inflate(R.layout.item_child_result,viewGroup,false);
                     holder.mTitleName= (TextView) convertView.findViewById(R.id.result_name);
 
                     holder.mDetail= (TextView) convertView.findViewById(R.id.result_detail);
@@ -165,7 +170,7 @@ public class SearchResultAdapter extends BaseExpandableListAdapter {
                     break;
                 case TYPE_CONTACT:
                     contactHolder=new ContactHolder();
-                    convertView= LayoutInflater.from(mContext).inflate(R.layout.item_contact,viewGroup,false);
+                    convertView=LayoutInflater.from(mContext).inflate(R.layout.item_contact,viewGroup,false);
                     contactHolder.mContactName= (TextView) convertView.findViewById(R.id.item_contact_name);
                     convertView.setTag(contactHolder);
                     break;
@@ -189,7 +194,7 @@ public class SearchResultAdapter extends BaseExpandableListAdapter {
                     holder.mIcon.setImageDrawable(mResultMap.get(i).get(i1).getIcon());
                     holder.mTitleName.setText(mResultMap.get(i).get(i1).getName());
                     holder.mDetail.setText("应用程序");
-                    Log.e("smile","应用");
+                    //  XLog.e("smile","应用");
                     break;
                     //联系人
                 }else if (mGroup.get(i).equals(mContext.getResources().getString(R.string.result_music))){
@@ -197,7 +202,7 @@ public class SearchResultAdapter extends BaseExpandableListAdapter {
                     holder.mTitleName.setText(mResultMap.get(i).get(i1).getName());
                     holder.mIcon.setImageResource(R.drawable.list_icon_music);
                     holder.mDetail.setText(mResultMap.get(i).get(i1).getDetail());
-                    Log.e("smile","音乐");
+                    //  XLog.e("smile","音乐");
                     break;
                     //短信
                 }else if (mGroup.get(i).equals(mContext.getResources().getString(R.string.result_msn))){
@@ -207,9 +212,6 @@ public class SearchResultAdapter extends BaseExpandableListAdapter {
                     }else {
                         holder.mTitleName.setText(titleName);
                     }
-                    //   XLog.e("smile","短信内容"+mResultMap.get(i).get(i1).getDetail());
-
-                    //   XLog.e("smile","短信联系人名字 "+mResultMap.get(i).get(i1).getDetail()+"  号码"+mResultMap.get(i).get(i1).getEvent());
                     holder.mDetail.setText(mResultMap.get(i).get(i1).getDetail());
                     holder.mIcon.setImageResource(R.drawable.list_icon_message);
                     //  XLog.e("smile","短信");
@@ -222,14 +224,13 @@ public class SearchResultAdapter extends BaseExpandableListAdapter {
                     holder.mIcon.setImageResource(R.drawable.list_icon_schedule);
                     break;
                 }
-            //联系人
+                //联系人
             case TYPE_CONTACT:
                 contactHolder.mContactName.setText(mResultMap.get(i).get(i1).getName());
                 break;
-
         }
 
-     return convertView;
+        return convertView;
     }
 
     @Override
@@ -242,14 +243,7 @@ public class SearchResultAdapter extends BaseExpandableListAdapter {
         if (mGroup.get(groupPosition).equals(mContext.getResources().getString(R.string.result_contact))){
             return TYPE_CONTACT;
         }else
-        return TYPE_NORMAL;
-
-
-    }
-
-    public void clearData(){
-        mResultMap.clear();
-        mGroup.clear();
+            return TYPE_NORMAL;
     }
 
     /**
@@ -264,7 +258,7 @@ public class SearchResultAdapter extends BaseExpandableListAdapter {
     ExpandableListView.OnChildClickListener listener=new ExpandableListView.OnChildClickListener() {
         @Override
         public boolean onChildClick(ExpandableListView expandableListView, View view, int i, int i1, long l) {
-            Log.e("dandy","点击了 "+mResultMap.get(i).get(i1).getName()+"  "+mGroup.get(i));
+            //  XLog.e("dandy","点击了 "+mResultMap.get(i).get(i1).getName()+"  "+mGroup.get(i));
             String groupName=mGroup.get(i);
             if (groupName.equals(mContext.getResources().getString(R.string.result_app))){
                 openApp(mResultMap.get(i).get(i1).getEvent());
@@ -281,8 +275,6 @@ public class SearchResultAdapter extends BaseExpandableListAdapter {
                 openSchedule(mResultMap.get(i).get(i1).getEvent());
 
             }
-
-
             return false;
         }
     };
@@ -295,7 +287,10 @@ public class SearchResultAdapter extends BaseExpandableListAdapter {
         return listener;
     }
 
-
+    public void clearData(){
+        mResultMap.clear();
+        mGroup.clear();
+    }
 
     @Override
     public boolean isChildSelectable(int i, int i1) {
@@ -311,10 +306,7 @@ public class SearchResultAdapter extends BaseExpandableListAdapter {
     class ChildHolder{
         TextView mTitleName;
         TextView mDetail;
-
         ImageView mIcon;
-
-
     }
 
     class ContactHolder{
@@ -328,7 +320,7 @@ public class SearchResultAdapter extends BaseExpandableListAdapter {
     private void  openApp(String event){
         Intent intent;
         intent=mContext.getPackageManager().getLaunchIntentForPackage(event);
-       // XLog.e("dandy","context "+mContext);
+        // XLog.e("dandy","context "+mContext);
         if (intent==null||mContext==null){
             return;
         }
@@ -356,18 +348,16 @@ public class SearchResultAdapter extends BaseExpandableListAdapter {
     }
 
     private void openMusic(String event){
-        Log.e("smile",""+event);
-        Intent intent = new Intent(Intent.ACTION_VIEW);
-        intent.setDataAndType(Uri.parse("file://"+event), "audio/mp3");
-        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-        mContext.startActivity(intent);
+       // XLog.e("smile",""+event);
+        Intent it = new Intent(Intent.ACTION_VIEW);
+        it.setDataAndType(Uri.parse("file://"+event), "audio/mp3");
+        mContext.startActivity(it);
     }
 
     private void openSchedule(String event){
         Uri uri = ContentUris.withAppendedId(CalendarContract.Events.CONTENT_URI, Integer.valueOf(event));
         Intent intent = new Intent(Intent.ACTION_VIEW)
                 .setData(uri);
-        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
         mContext.startActivity(intent);
     }
 }

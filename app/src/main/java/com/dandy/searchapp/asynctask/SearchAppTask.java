@@ -27,18 +27,13 @@ public class SearchAppTask extends BaseAsyncTask {
 
     /**
      * 异步操作
-     * @param strings
+     * @param strings 传递的参数
      * @return
      */
     @Override
     protected Map<Integer,List<Result>> doInBackground(String... strings) {
         List<Result> results=new ArrayList<>();
-
-        //判断是不是小写，是就小写转换成大写
-        String reg = "[a-z]";
-        if (strings[0].matches(reg)){
-            strings[0]=strings[0].toUpperCase();
-        }
+        strings[0]=toLowerCase(strings[0]);
 
         final Intent mainIntent = new Intent(Intent.ACTION_MAIN, null)
                 .addCategory(Intent.CATEGORY_LAUNCHER);
@@ -46,7 +41,8 @@ public class SearchAppTask extends BaseAsyncTask {
         final List<ResolveInfo> apps = packageManager.queryIntentActivities(mainIntent, 0);
         for (ResolveInfo info:apps){
             String appName=info.loadLabel(packageManager).toString();
-            if (appName.contains(strings[0])){
+            String tempName=toLowerCase(appName);
+            if (tempName.contains(strings[0])){
                 Result result=new Result();
                 result.setName(appName);
                 result.setEvent(info.activityInfo.packageName);
@@ -59,6 +55,39 @@ public class SearchAppTask extends BaseAsyncTask {
         Map<Integer,List<Result>> listMap=new HashMap<>();
         listMap.put(Config.TYPE_APP,results);
         return listMap;
+    }
+
+    /**
+     * 转换成小写
+     * @param s
+     * @return
+     */
+    private String toLowerCase(String s){
+        //XLog.e("smile","转化成小写后 "+);
+        return s.toLowerCase();
+    }
+
+    /**
+     * 判断首字符是否为字母，是则转换成大写
+     * @param s
+     * @return
+     */
+    private String check(String s){
+        String result = s;
+        char fir=s.charAt(0);
+        if (Character.isLetter(fir)){
+            result =toUpperCaseFirstOne(result);
+        }
+        //XLog.e("smile"," ww  "+result);
+        return result;
+    }
+
+    //首字母转大写
+    public static String toUpperCaseFirstOne(String s){
+        if(Character.isUpperCase(s.charAt(0))) {
+            return s;
+        }else
+            return (new StringBuilder()).append(Character.toUpperCase(s.charAt(0))).append(s.substring(1)).toString();
     }
 
 

@@ -29,7 +29,7 @@ public class SearchContactTask extends BaseAsyncTask {
     @Override
     protected Map<Integer,List<Result>> doInBackground(String... strings) {
         List<Result> results=new ArrayList<>();
-        Log.e("dandy","执行了搜索联系人");
+        //  XLog.e("dandy","执行了搜索联系人");
         //查询结果，只要名字和号码就行了
         String[] projection = { ContactsContract.PhoneLookup.DISPLAY_NAME,
                 ContactsContract.CommonDataKinds.Phone.NUMBER };
@@ -37,7 +37,7 @@ public class SearchContactTask extends BaseAsyncTask {
         String selection=""+ ContactsContract.CommonDataKinds.Phone.NUMBER+ " LIKE ? OR "+
                 ContactsContract.PhoneLookup.DISPLAY_NAME+ " LIKE ? ";
         //查询参数
-        String[]selectionArgs=new String[]{"%"+ strings[0] +"%","%"+ strings[0] +"%"};
+        String []selectionArgs=new String[]{"%"+ strings[0] +"%","%"+ strings[0] +"%"};
 
         // 将自己添加到 msPeers 中
         Cursor cursor = mContext.getContentResolver().query(
@@ -46,58 +46,37 @@ public class SearchContactTask extends BaseAsyncTask {
                 selection,
                 selectionArgs,
                 null);
+        if (cursor != null && cursor.moveToFirst()) {
+            do {
+                Result result=new Result();
+                String name = cursor.getString(cursor
+                        .getColumnIndex(ContactsContract.PhoneLookup.DISPLAY_NAME));//姓名
+                String num =cursor.getString(cursor
+                        .getColumnIndex(ContactsContract.CommonDataKinds.Phone.NUMBER));//号码
 
-        while (cursor.moveToNext()){
-            Result result=new Result();
-            String name = cursor.getString(cursor
-                    .getColumnIndex(ContactsContract.PhoneLookup.DISPLAY_NAME));//姓名
-            String num =cursor.getString(cursor
-                    .getColumnIndex(ContactsContract.CommonDataKinds.Phone.NUMBER));//号码
+                //根据姓名去查询contactID;
+                Cursor cd=mContext.getContentResolver().query(
+                        ContactsContract.RawContacts.CONTENT_URI,new String[]{ContactsContract.RawContacts.CONTACT_ID},
+                        ContactsContract.RawContacts.DISPLAY_NAME_PRIMARY+ "=?",new String[]{name},null);
 
-            //根据姓名去查询contactID;
-            Cursor cd=mContext.getContentResolver().query(
-                    ContactsContract.RawContacts.CONTENT_URI,new String[]{ContactsContract.RawContacts.CONTACT_ID},
-                    ContactsContract.RawContacts.DISPLAY_NAME_PRIMARY+ "=?",new String[]{name},null);
-
-            while (cd.moveToNext()){
-                int  contactId=cd.getInt(cd.getColumnIndex(ContactsContract.RawContacts.CONTACT_ID));//这个ID作为跳转ID
-                Log.e("dandy ","id  "+contactId);
-                result.setEvent(""+contactId);
-                mEvents.add(""+contactId);
-            }
-
-            Log.e("dandy"," name "+name +" num "+num);
-            //放入集合中
-
-            result.setName(name);
-            results.add(result);
-
+                while (cd.moveToNext()){
+                    int  contactId=cd.getInt(cd.getColumnIndex(ContactsContract.RawContacts.CONTACT_ID));//这个ID作为跳转ID
+                    //  Log.e("dandy ","id  "+contactId);
+                    result.setEvent(""+contactId);
+                    mEvents.add(""+contactId);
+                }
+                cd.close();
+                result.setName(name);
+                results.add(result);
+            }while (cursor.moveToNext());
+            cursor.close();
 
         }
-
-        cursor.close();
-
 
 
         Map<Integer,List<Result>> listMap=new HashMap<>();
         listMap.put(Config.TYPE_CONTACT,removeDuplicate(results));
         return listMap;
     }
-
-    /**
-     * 去掉重复的联系人
-     * @param list
-     * @return
-     */
-    public List<Result> removeDuplicate(List<Result> list){
-        List<Result> resultList=new ArrayList<>();
-        for (Object o:list){
-            if (!resultList.contains(o)){
-                resultList.add((Result) o);
-            }
-        }
-
-
-        return resultList;
-    }
 }
+ 
