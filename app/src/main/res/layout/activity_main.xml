@@ -39,6 +39,8 @@
             android:hint="Search"
             android:background="@null"
             android:textColorHint="@color/search_hint_color"
+            android:textColor="@color/white"
+            android:lines="1"
             android:layout_centerVertical="true"
             android:layout_toRightOf="@id/search_seeting_icon_img"/>
 

@@ -70,7 +70,12 @@ public class Result {
             return false;
         }
         Result result= (Result) o;
-        if (this==null&&result==null){
+
+
+        if (result==null){
+            return false;
+        }
+        if (this==null){
             return false;
         }
         return  (this.getEvent().equals(result.getEvent())&&this.getName().equals(result.getName()));

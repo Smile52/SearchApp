@@ -53,7 +53,7 @@ public class SearchMsnTask extends BaseAsyncTask {
 
                     while (cd.moveToNext()){
                         String  displayName=cd.getString(cd.getColumnIndex(ContactsContract.PhoneLookup.DISPLAY_NAME));
-                        //  Log.e("smile ","id  "+displayName);
+                         Log.e("smile ","id  "+displayName);
                         name=displayName;
 
                     }
@@ -70,7 +70,7 @@ public class SearchMsnTask extends BaseAsyncTask {
         }
 
         Map<Integer,List<Result>> listMap=new HashMap<>();
-        listMap.put(Config.TYPE_MSN,removeDuplicate(results));
+        listMap.put(Config.TYPE_MSN,results);
         return listMap;
     }
 }

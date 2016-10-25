@@ -330,6 +330,7 @@ public class SearchResultAdapter extends BaseExpandableListAdapter {
     private void openContact(String event){
         Uri personUri = ContentUris.withAppendedId(ContactsContract.Contacts.CONTENT_URI, Integer.valueOf(event));//最后的ID参数为联系人Provider中的数据库BaseID，即哪一行
         Intent intent = new Intent(); intent.setAction(Intent.ACTION_VIEW);
+        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
         intent.setData(personUri);
         mContext.startActivity(intent);
 
@@ -358,6 +359,7 @@ public class SearchResultAdapter extends BaseExpandableListAdapter {
         Uri uri = ContentUris.withAppendedId(CalendarContract.Events.CONTENT_URI, Integer.valueOf(event));
         Intent intent = new Intent(Intent.ACTION_VIEW)
                 .setData(uri);
+        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
         mContext.startActivity(intent);
     }
 }
