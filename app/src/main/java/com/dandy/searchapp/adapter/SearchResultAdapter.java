@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.net.Uri;
 import android.provider.CalendarContract;
 import android.provider.ContactsContract;
+import android.support.v4.util.ArrayMap;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -29,7 +30,7 @@ import java.util.Map;
 
 public class SearchResultAdapter extends BaseExpandableListAdapter {
     private Context mContext;
-    private Map<Integer,List<Result>> mResultMap;
+    private ArrayMap<Integer,List<Result>> mResultMap;
     private List<String> mGroup;
     private final int TYPE_NORMAL=0;//普通的类型
     private final  int TYPE_CONTACT=1;//联系人类型
@@ -37,7 +38,7 @@ public class SearchResultAdapter extends BaseExpandableListAdapter {
     private static final int DEFAULT_MAX_NUM=3;//默认最多显示多少条数据
     private int[] mChildCounts={DEFAULT_MAX_NUM,DEFAULT_MAX_NUM,DEFAULT_MAX_NUM,DEFAULT_MAX_NUM,DEFAULT_MAX_NUM};//子view显示的数量
 
-    public SearchResultAdapter(Context mContext, Map<Integer, List<Result>> mResultMap, List<String> mTitle) {
+    public SearchResultAdapter(Context mContext, ArrayMap<Integer, List<Result>> mResultMap, List<String> mTitle) {
         this.mContext = mContext;
         this.mResultMap = mResultMap;
         this.mGroup = mTitle;

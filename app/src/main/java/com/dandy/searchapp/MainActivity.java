@@ -8,6 +8,7 @@ import android.graphics.drawable.Drawable;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.support.annotation.RequiresApi;
+import android.support.v4.util.ArrayMap;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.text.Editable;
@@ -191,7 +192,7 @@ public class MainActivity extends AppCompatActivity implements SearchResultImp,V
                 //XLog.e("dandy","长度"+resultList.size());
                 List<String> strings=new ArrayList<>();
                 strings.add(mContext.getResources().getString(R.string.result_app));
-                Map<Integer,List<Result>> map=new HashMap<>();
+                ArrayMap<Integer,List<Result>> map=new ArrayMap<>();
                 map.put(mKey,resultList);
                 mKey++;
                 mResultAdapter=new SearchResultAdapter(mContext,map,strings);
@@ -254,7 +255,7 @@ public class MainActivity extends AppCompatActivity implements SearchResultImp,V
         }
 
         if (mResultAdapter==null){
-            Map<Integer, List<Result>> map=new HashMap<>();
+            ArrayMap<Integer, List<Result>> map=new ArrayMap<>();
 
             map.put(mKey,resultList);
             mKey++;
